@@ -31,3 +31,14 @@ uint8_t USART0ReceiveByte() {
   return UDR0;
 }
 
+void USART0SendString(char* str) {
+  // Clean screen
+  USART0SendByte(0xFE);
+  USART0SendByte(0x01);
+
+  // Display data
+  int i;
+  for (i = 0; i < strlen(str); i++) {
+    USART0SendByte(str[i]);
+  }
+}
