@@ -1,5 +1,6 @@
 
 #include <avr/io.h>
+#include <string.h>
 #define USART_BAUDRATE 9600
 #define UBRR_VALUE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)
 

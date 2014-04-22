@@ -1,10 +1,13 @@
 #include <string.h>
+#include <avr/io.h>
 #include <util/delay.h>
 #include "usart.h"
 
 #define P_TOGGLE PD2
 #define P_TIMER  PD3
 #define P_SPEAKER PD5
+
+
 
 int timer_state() {
     if (PIND & (1 << P_TIMER)) {
@@ -31,6 +34,9 @@ int main (void) {
   PORTD |= (1 << P_TIMER); // Pull-up timer switch
 
   while(1) {
+    USART0SendString("hi");
+  }
+  while (1) {
     if (timer_state()) {
       USART0SendByte(0xFE);
       USART0SendByte(128);
