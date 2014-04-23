@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <string.h>
 #include <avr/io.h>
 #include <util/delay.h>
@@ -13,16 +14,27 @@ int main (void) {
   buttons_init();
 
 
+  int last = 0;
 
   while (1) {
     if (timer_state()) {
-      USART0SendString("timer");
+      if (last != 1) {
+        last = 1;
+        USART0SendString("timer");
+      }
     } else if (toggle_state()) {
-      USART0SendString("toggle");
+      if (last != 2) {
+        last = 2;
+        USART0SendString("toggle");
+      }
     } else {
-      USART0SendString("none\nnone");
+      if (last != 3) {
+        last = 3;
+        USART0SendString("none\nnone");
+      }
     }
-    _delay_ms(1000);
+
+    _delay_ms(1);
   }
 }
 

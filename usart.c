@@ -48,3 +48,11 @@ void USART0SendString(char* str) {
     }
   }
 }
+
+void USART0SendInt(int str) {
+  // Clean screen
+  USART0SendByte(0xFE);
+  USART0SendByte(0x01);
+
+  USART0SendByte(str);
+}
