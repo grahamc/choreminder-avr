@@ -11,10 +11,7 @@ blink.elf:
 		-mmcu=atmega328p \
 		-Wall -Werror \
 		-Os -o blink.elf \
-		main.c \
-		states.c \
-		# usart.c \
-
+		main.c usart.c
 
 blink.hex: blink.elf
 	avr-objcopy -j .text -j .data -O ihex blink.elf blink.hex
