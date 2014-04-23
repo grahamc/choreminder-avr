@@ -40,6 +40,11 @@ void USART0SendString(char* str) {
   // Display data
   int i;
   for (i = 0; i < strlen(str); i++) {
-    USART0SendByte(str[i]);
+    if (str[i] == '\n') {
+      USART0SendByte(0xFE);
+      USART0SendByte(192); // Go to row 2, column 1
+    } else {
+      USART0SendByte(str[i]);
+    }
   }
 }

@@ -12,21 +12,17 @@ int main (void) {
   USART0Init();
   buttons_init();
 
+
+
   while (1) {
     if (timer_state()) {
-      USART0SendByte(0xFE);
-      USART0SendByte(128);
       USART0SendString("timer");
     } else if (toggle_state()) {
-      USART0SendByte(0xFE);
-      USART0SendByte(192);
       USART0SendString("toggle");
     } else {
-      USART0SendByte(0xFE);
-      USART0SendByte(128);
-      USART0SendString("none  ");
+      USART0SendString("none\nnone");
     }
-    _delay_ms(10);
+    _delay_ms(1000);
   }
 }
 
