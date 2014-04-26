@@ -9,7 +9,33 @@
 
 #define P_SPEAKER PD5
 
+void pwm(void) {
+    DDRD |= (1 << DDD5);
+    // PD6 is now an output
+
+    OCR0B = 128;
+    // set PWM for 50% duty cycle
+
+
+    TCCR0B |= (1 << COM0B1);
+    // set none-inverting mode
+
+    TCCR0B |= (1 << WGM01) | (1 << WGM00);
+    // set fast PWM Mode
+
+    TCCR0B |= (1 << CS01);
+    // set prescaler to 8 and starts PWM
+
+
+    while (1);
+    {
+        // we have a working Fast PWM
+    }
+
+}
+
 int main (void) {
+pwm();
   USART0Init();
   buttons_init();
 
