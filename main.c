@@ -9,10 +9,23 @@
 
 #define P_SPEAKER PD5
 
-int main (void) {
-  USART0Init();
-  buttons_init();
+int chore_pointer = 0;
 
+void write_next_chore()
+{
+  USART0SendString(tasks[chore_pointer++]);
+
+  if (chore_pointer == sizeof(tasks)) {
+    chore_pointer = 0;
+  }
+}
+
+int main (void) {
+  write_next_chore();
+
+  USART0Init();
+  _delay_ms(10);
+  buttons_init();
 
   int last = 0;
 
@@ -20,7 +33,7 @@ int main (void) {
     if (timer_state()) {
       if (last != 1) {
         last = 1;
-        USART0SendString("timer");
+        write_next_chore();
       }
     } else if (toggle_state()) {
       if (last != 2) {
