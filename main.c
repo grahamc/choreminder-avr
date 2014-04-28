@@ -5,12 +5,11 @@
 int main (void) {
   tone_init();
 
-  int i;
   while (1) {
-    for (i = 0; i <= 4400; i += 440) {
-      tone(i);
+      tone(440);
       _delay_ms(1000);
-    }
+      notone();
+      _delay_ms(1000);
   }
 }
 

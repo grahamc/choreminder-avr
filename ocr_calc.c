@@ -1,4 +1,5 @@
 #include <avr/io.h>
+#include "ocr_calc.h"
 
 int scalar_size[6] = {
   1,
@@ -25,12 +26,16 @@ void tone_init() {
   TCCR0A |= (1 << WGM01) | (1 << WGM00); // fast PWM
 }
 
+void notone() {
+  TCCR0B &= ~scalar_bits[NO_SCALAR];
+}
+
 void tone(int frequency) {
   int scalar_ref = scalar(frequency);
   int ocr = ocr_for_scalar(frequency, scalar_size[scalar_ref]);
 
-  TCCR0B &= ~scalar_bits[sizeof(scalar_bits) - 1];
-  TCCR0B |= scalar_bits[scalar];
+  TCCR0B &= ~scalar_bits[NO_SCALAR];
+  TCCR0B |= scalar_bits[scalar_ref];
 
   OCR0B = ocr;
 }
