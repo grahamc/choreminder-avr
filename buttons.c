@@ -1,7 +1,5 @@
 
-#include <avr/io.h>
-#define P_TOGGLE PD2
-#define P_TIMER  PD3
+#include "buttons.h"
 
 void buttons_init()
 {

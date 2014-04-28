@@ -1,4 +1,3 @@
-#include <avr/io.h>
 #include "ocr_calc.h"
 
 int scalar_size[6] = {
