@@ -11,13 +11,13 @@ blink.elf:
 		-mmcu=atmega328p \
 		-Wall -Werror \
 		-Os -o blink.elf \
-		main.c usart.c buttons.c
+		main.c usart.c buttons.c ocr_calc.c
 
 blink.hex: blink.elf
 	avr-objcopy -j .text -j .data -O ihex blink.elf blink.hex
 
 flash: blink.hex
-	avrdude -p m328p -c stk500v2 -B 50 -P /dev/cu.usbmodem1411 -v -e \
+	avrdude -p m328p -c stk500v2 -B 50 -P /dev/cu.usbmodem* -v -e \
 		-U flash:w:blink.hex \
 		-U lfuse:w:0xE2:m \
 		-U hfuse:w:0xD9:m \

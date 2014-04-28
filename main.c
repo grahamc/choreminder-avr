@@ -1,13 +1,6 @@
-#include <stdlib.h>
-#include <string.h>
 #include <avr/io.h>
 #include <util/delay.h>
-
-#include "usart.h"
-#include "buttons.h"
-#include "chores.h"
-
-#define P_SPEAKER PD5
+#include "ocr_calc.h"
 
 int chore_pointer = 0;
 
@@ -23,6 +16,7 @@ void write_next_chore()
 int main (void) {
   write_next_chore();
 
+  tone_init();
   USART0Init();
   _delay_ms(10);
   buttons_init();
@@ -48,6 +42,12 @@ int main (void) {
     }
 
     _delay_ms(1);
+
+  while (1) {
+      tone(440);
+      _delay_ms(1000);
+      notone();
+      _delay_ms(1000);
   }
 }
 
