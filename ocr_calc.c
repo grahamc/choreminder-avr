@@ -1,6 +1,6 @@
 #include "ocr_calc.h"
 
-int scalar_size[6] = {
+int scaler_size[6] = {
   1,
   8,
   64,
@@ -9,7 +9,7 @@ int scalar_size[6] = {
   9999
 };
 
-int scalar_bits[6] = {
+int scaler_bits[6] = {
   (1 << CS00),
   (1 << CS01),
   (1 << CS01) | (1 << CS00),
@@ -26,34 +26,34 @@ void tone_init() {
 }
 
 void notone() {
-  TCCR0B &= ~scalar_bits[NO_SCALAR];
+  TCCR0B &= ~scaler_bits[NO_SCALAR];
 }
 
 void tone(int frequency) {
-  int scalar_ref = scalar(frequency);
-  int ocr = ocr_for_scalar(frequency, scalar_size[scalar_ref]);
+  int scaler_ref = scaler(frequency);
+  int ocr = ocr_for_scaler(frequency, scaler_size[scaler_ref]);
 
-  TCCR0B &= ~scalar_bits[NO_SCALAR];
-  TCCR0B |= scalar_bits[scalar_ref];
+  TCCR0B &= ~scaler_bits[NO_SCALAR];
+  TCCR0B |= scaler_bits[scaler_ref];
 
   OCR0B = ocr;
 }
 
-int scalar(int frequency) {
-  int scalar;
-  for (scalar = 0; scalar < sizeof(scalar_size); scalar++) {
-    if (scalar_size[scalar] == 0) {
+int scaler(int frequency) {
+  int scaler;
+  for (scaler = 0; scaler < sizeof(scaler_size); scaler++) {
+    if (scaler_size[scaler] == 0) {
       break;
     }
-    if (ocr_for_scalar(frequency, scalar_size[scalar]) < 256) {
-      return scalar;
+    if (ocr_for_scaler(frequency, scaler_size[scaler]) < 256) {
+      return scaler;
     }
   }
 
-  return scalar; // Best case...
+  return scaler; // Best case...
 }
 
-int ocr_for_scalar(int frequency, int scalar) {
-  return F_CPU / frequency / scalar / 2 - 1;
+int ocr_for_scaler(int frequency, int scaler) {
+  return F_CPU / frequency / scaler / 2 - 1;
 }
 

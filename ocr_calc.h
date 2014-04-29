@@ -10,7 +10,7 @@ void tone_init();
 void tone(int frequency);
 void notone();
 
-int scalar(int frequency);
-int ocr_for_scalar(int frequency, int scalar);
+int scaler(int frequency);
+int ocr_for_scaler(int frequency, int scaler);
 #endif
 
