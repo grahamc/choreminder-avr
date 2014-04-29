@@ -33,6 +33,7 @@ int main (void) {
       if (last != 2) {
         last = 2;
         USART0SendString("toggle");
+        break;
       }
     } else {
       if (last != 3) {
