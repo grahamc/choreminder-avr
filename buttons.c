@@ -53,7 +53,9 @@ int main() {
 
   // Unstable: change to LOW
   button_set_state(&b1, P_LOW);
+  for (i = 0; i < 5; i++) { button_tick(&b1); } // Not stable
   printbutton(&b1);
+
   // Make it stable
   for (i = 0; i < 15; i++) { button_tick(&b1); }
 
