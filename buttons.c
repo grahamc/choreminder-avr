@@ -28,7 +28,7 @@ void printbutton(struct Button *button) {
 
   if (bs == B_UNSTABLE) {
     state = 'U';
-  } else if (bs == P_HIGH) {
+  } else if (bs == B_HIGH) {
     state = 'H';
   } else {
     state = 'L';
