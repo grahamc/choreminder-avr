@@ -1,6 +1,4 @@
 #include <util/delay.h>
-#include <avr/power.h>
-#include <avr/sleep.h>
 
 #include "ocr_calc.h"
 #include "chores.h"
@@ -9,9 +7,7 @@
 
 
 int main (void) {
-  ADCSRA = 0;
-  power_adc_disable();
-
+  save_power();
   USART0Init();
   buttons_init();
   tone_init();
@@ -26,15 +22,9 @@ int main (void) {
   int i;
   int last_i = 5;
 
-  set_sleep_mode(SLEEP_MODE_PWR_DOWN);
-  cli();
-  sleep_enable();
-  sei();
-  sleep_cpu();
-  sleep_disable();
+  deep_sleep();
 
   while (1) {
-
     button_tick(&button_timer);
     button_tick(&button_toggle);
 
