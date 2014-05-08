@@ -7,7 +7,6 @@
 #include "buttons.h"
 
 
-
 int main (void) {
   USART0Init();
   buttons_init();
@@ -24,27 +23,36 @@ int main (void) {
   }
 
 
+    button_tick(&button_timer);
+    button_tick(&button_toggle);
 
-  //tone_init();
-  tone(4400);
-  _delay_ms(200);
-  tone(440);
-  _delay_ms(200);
-  tone(4400);
-  _delay_ms(200);
-  notone();
-
-  while (1) {
-    if (toggle_state()) {
-      write_next_chore();
-      while (toggle_state()) { _delay_ms(1); } // Wait for it to go down.
-      while (!toggle_state()) { _delay_ms(1); } // Wait for ack
-      USART0SendString("DONE DONE\nDONE DONE");
-      while (toggle_state()) { _delay_ms(1); } // Wait for it to go down.
+    i = 0;
+    if (timer_state() == 0) {
+      i += 1;
     }
+    if (toggle_state() == 0) {
+      i += 2;
+    }
+
+    if (i != last_i) {
+      last_i = i;
+      switch (i) {
+        case 0:
+          USART0SendString("");
+          break;
+        case 1:
+          USART0SendString("Timer");
+          break;
+        case 2:
+          USART0SendString("\nToggle");
+          break;
+        case 3:
+          USART0SendString("Timer\nToggle");
+          break;
+      }
+    }
+
     _delay_ms(1);
   }
 }
-
-
 

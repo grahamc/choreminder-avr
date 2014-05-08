@@ -2,12 +2,15 @@
 #include "buttons.h"
 
 ISR (INT0_vect) {
-  button_set_state(&button_toggle, PIND & (1 << P_TOGGLE));
+  button_set_state(&button_toggle, PIND & (1 << P_TOGGLE) ? P_HIGH : P_LOW);
 }
 
 ISR (INT1_vect) {
-  button_set_state(&button_toggle, PIND & (1 << P_TIMER));
+  button_set_state(&button_timer, PIND & (1 << P_TIMER) ? P_HIGH : P_LOW);
 }
+
+struct Button button_timer = { 0, 10, P_HIGH };
+struct Button button_toggle = { 0, 10, P_HIGH };
 
 void buttons_init()
 {
@@ -17,8 +20,8 @@ void buttons_init()
 
   EICRA |= (1 << ISC00);    // set INT0 to trigger on ANY logic change
   EIMSK |= (1 << INT0);     // Turns on INT0
-  EICRA |= (1 << ISC01);    // set INT0 to trigger on ANY logic change
-  EIMSK |= (1 << INT1);     // Turns on INT0
+  EICRA |= (1 << ISC10);    // set INT1 to trigger on ANY logic change
+  EIMSK |= (1 << INT1);     // Turns on INT1
   sei();
 }
 
@@ -40,7 +43,9 @@ int toggle_state() {
 
 void button_tick(struct Button *button)
 {
-  button->ticks++;
+  if (button->ticks <= button->stable_ticks) {
+    button->ticks++;
+  }
 }
 
 void button_set_state(struct Button *button, pin_state new_state) {
