@@ -31,6 +31,18 @@ uint8_t USART0ReceiveByte() {
   return UDR0;
 }
 
+void USART0BacklightOn() {
+  USART0SendByte(0x7C);
+  USART0SendByte(157);
+}
+
+
+void USART0BacklightOff() {
+  USART0SendByte(0x7C);
+  USART0SendByte(128);
+}
+
+
 void USART0SendString(char* str) {
   // Clean screen
   USART0SendByte(0xFE);

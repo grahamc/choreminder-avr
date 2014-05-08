@@ -12,16 +12,21 @@ int main (void) {
   buttons_init();
   tone_init();
 
-  USART0SendString("hey");
+  _delay_ms(1000);
+  USART0BacklightOff();
+  _delay_ms(1000);
+  USART0BacklightOff();
+  _delay_ms(1000);
+  USART0BacklightOff();
+  _delay_ms(50);
+  int i;
+  int last_i = 5;
+
+
+
+
 
   while (1) {
-      USART0SendString("timer");
-      USART0SendString("toggle");
-      USART0SendString("none");
-
-    _delay_ms(1);
-  }
-
 
     button_tick(&button_timer);
     button_tick(&button_toggle);
