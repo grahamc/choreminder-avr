@@ -1,10 +1,23 @@
 #include <util/delay.h>
 
-#include "ocr_calc.h"
-#include "chores.h"
-#include "usart.h"
 #include "buttons.h"
+#include "chores.h"
+#include "ocr_calc.h"
+#include "sleep.h"
+#include "usart.h"
 
+#define TIMER_LENGTH 300
+
+#define STATE_GO_OFF 0
+#define STATE_IS_OFF 1
+#define STATE_HAS_CHORE 2
+
+void tick()
+{
+  button_tick(&button_timer);
+  button_tick(&button_toggle);
+  _delay_ms(1);
+}
 
 int main (void) {
   save_power();
@@ -12,49 +25,59 @@ int main (void) {
   buttons_init();
   tone_init();
 
-  _delay_ms(1000);
-  USART0BacklightOff();
-  _delay_ms(1000);
-  USART0BacklightOff();
-  _delay_ms(1000);
-  USART0BacklightOff();
-  _delay_ms(50);
-  int i;
-  int last_i = 5;
 
-  deep_sleep();
+  int useless_steps = 0;
+  int state = STATE_GO_OFF;
 
   while (1) {
-    button_tick(&button_timer);
-    button_tick(&button_toggle);
-
-    i = 0;
-    if (timer_state() == 0) {
-      i += 1;
+    if (useless_steps >= 1000) {
+      useless_steps = 0;
+      state = STATE_GO_OFF;
     }
+
+    if (state == STATE_GO_OFF) {
+      state = STATE_IS_OFF;
+
+      USART0SendString("");
+      USART0BacklightOff();
+      deep_sleep();
+    }
+
+    tick();
+
     if (toggle_state() == 0) {
-      i += 2;
-    }
+      useless_steps = 0;
 
-    if (i != last_i) {
-      last_i = i;
-      switch (i) {
-        case 0:
-          USART0SendString("");
-          break;
-        case 1:
-          USART0SendString("Timer");
-          break;
-        case 2:
-          USART0SendString("\nToggle");
-          break;
-        case 3:
-          USART0SendString("Timer\nToggle");
-          break;
+      USART0BacklightOn();
+      write_next_chore();
+      while (toggle_state() == 0) { tick(); } // Wait for button to be released
+
+      int seconds = 0;
+      int miliseconds = 0;
+
+      while (1) {
+        if (toggle_state() == 0) { state = STATE_GO_OFF; break; }
+        if (timer_state() == 0) { miliseconds = 0; seconds = 0; notone(); }
+
+        miliseconds++;
+        if (miliseconds >= 1000) {
+          seconds++;
+          miliseconds = 0;
+        }
+
+        if (seconds == TIMER_LENGTH) {
+          tone(4400);
+        } else if (seconds > 1000) {
+          seconds = (TIMER_LENGTH + 1);
+        }
+
+        tick();
       }
+    } else {
+      useless_steps++;
     }
-
-    _delay_ms(1);
   }
 }
+
+
 
