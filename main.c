@@ -56,7 +56,7 @@ int main (void) {
       int miliseconds = 0;
 
       while (1) {
-        if (toggle_state() == 0) { state = STATE_GO_OFF; break; }
+        if (toggle_state() == 0) { state = STATE_GO_OFF; notone(); break; }
         if (timer_state() == 0) { miliseconds = 0; seconds = 0; notone(); }
 
         miliseconds++;

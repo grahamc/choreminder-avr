@@ -46,14 +46,27 @@ char * tasks[CHORE_COUNT] = {
   "Mop floor       \n              "
 };
 
-int chore_pointer = 0;
-
 void write_next_chore()
 {
+  uint8_t chore_pointer = get_chore_location();
+
   USART0SendString(tasks[chore_pointer++]);
 
   chore_pointer++;
+  set_chore_location(chore_pointer);
+}
+
+uint8_t get_chore_location() {
+ uint8_t chore_pointer = eeprom_read_byte(0);
+
   if (chore_pointer >= CHORE_COUNT) {
     chore_pointer = 0;
   }
+
+  return chore_pointer;
 }
+
+void set_chore_location(uint8_t i) {
+  eeprom_write_byte(0, i);
+}
+
