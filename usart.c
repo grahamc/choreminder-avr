@@ -1,7 +1,12 @@
 
 #include "usart.h"
+#define DISPLAY_DELAY 10
 #define USART_BAUDRATE 9600
 #define UBRR_VALUE (((F_CPU / (USART_BAUDRATE * 16UL))) - 1)
+
+void USART0Delay() {
+  _delay_ms(DISPLAY_DELAY);
+}
 
 void USART0Init(void)
 {
@@ -34,12 +39,14 @@ uint8_t USART0ReceiveByte() {
 void USART0BacklightOn() {
   USART0SendByte(0x7C);
   USART0SendByte(157);
+  USART0Delay();
 }
 
 
 void USART0BacklightOff() {
   USART0SendByte(0x7C);
   USART0SendByte(128);
+  USART0Delay();
 }
 
 
@@ -58,6 +65,7 @@ void USART0SendString(char* str) {
       USART0SendByte(str[i]);
     }
   }
+  USART0Delay();
 }
 
 void USART0SendInt(int str) {
@@ -67,3 +75,4 @@ void USART0SendInt(int str) {
 
   USART0SendByte(str);
 }
+

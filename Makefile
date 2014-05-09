@@ -12,9 +12,10 @@ firmware.elf:
 		-Wall -Werror \
 		-Os -o firmware.elf \
 		main.c \
-		usart.c \
 		buttons.c \
 		ocr_calc.c \
+		sleep.c \
+		usart.c \
 		chores.c \
 
 firmware.hex: firmware.elf

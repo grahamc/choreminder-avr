@@ -1,3 +1,4 @@
+#include "sleep.h"
 
 void save_power() {
   ADCSRA = 0;

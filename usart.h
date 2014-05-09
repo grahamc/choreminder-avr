@@ -2,6 +2,7 @@
 #define USART_H
 #include <avr/io.h>
 #include <string.h>
+#include <util/delay.h>
 
 void USART0Init(void);
 void USART0SendByte(unsigned char u8Data);
